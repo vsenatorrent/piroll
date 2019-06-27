@@ -83,12 +83,18 @@ function images() {
     .pipe(browsersync.reload({ stream:true }));
 }
 
+function jslibs(){
+  return gulp.src(['./src/scripts/libs/*.js'])
+    .pipe(gulp.dest('./dist/scripts/libs/'));
+}
+
 function watchFiles() {
   gulp.watch('./src/sass/**/*.sass', gulpSass).on('change', browsersync.reload);
+  gulp.watch('./src/scripts/libs/*.js', jslibs);
   gulp.watch('./src/scripts/**/*', js);
   gulp.watch('./src/*.html', html).on('change', browsersync.reload);
   gulp.watch('./src/img/**/*', images);
 }
 
 gulp.task('watch', gulp.parallel(watchFiles, browserSync));
-gulp.task('build', gulp.series(clean, js, html, gulpSass, images));
+gulp.task('build', gulp.series(clean, js, jslibs, html, gulpSass, images));
